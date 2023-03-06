@@ -14,6 +14,7 @@ pipeline {
             steps {
                 echo 'Creating Infrastructure for the App on AWS Cloud'
                 sh 'cd eks-terraform'
+                sh 'ls'
                 sh 'terraform init'
                 sh 'terraform apply --auto-approve'
             }
