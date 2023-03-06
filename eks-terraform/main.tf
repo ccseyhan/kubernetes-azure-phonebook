@@ -27,6 +27,23 @@ resource "aws_eks_cluster" "example" {
   ]
 }
 
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  
+}
+
+resource "aws_subnet" "example1" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
+}
+
+resource "aws_subnet" "example2" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.2.0/24"
+  availability_zone = "us-east-1b"
+  }
+
 output "endpoint" {
   value = aws_eks_cluster.example.endpoint
 }
@@ -36,7 +53,7 @@ output "kubeconfig-certificate-authority-data" {
 }
 
 data "aws_iam_policy_document" "assume_role" {
-  satement {
+  statement {
     effect = "Allow"
 
     principals {
