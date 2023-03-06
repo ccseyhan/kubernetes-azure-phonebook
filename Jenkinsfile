@@ -12,11 +12,15 @@ pipeline {
     stages {
         stage('Create Infrastructure for the App') {
             steps {
-                echo 'Creating Infrastructure for the App on AWS Cloud'
-                sh 'cd eks-terraform'
-                sh 'ls'
-                sh 'terraform init'
-                sh 'terraform apply --auto-approve'
+                dir('/var/lib/jenkins/workspace/terraform-pipeline/eks-terraform'){
+                    sh 'terraform init'
+                    sh 'terraform apply --auto-approve'
+                }
+                // echo 'Creating Infrastructure for the App on AWS Cloud'
+                // sh 'cd eks-terraform'
+                // sh 'ls'
+                // sh 'terraform init'
+                // sh 'terraform apply --auto-approve'
             }
         }
         stage('Destroy the Infrastructure'){
