@@ -18,6 +18,7 @@ spec:
       containers:
         - name: cdu-server
           image: eakkaya64/web-server
+          imagePullPolicy: Always
           ports:
           - containerPort: 80
           env:

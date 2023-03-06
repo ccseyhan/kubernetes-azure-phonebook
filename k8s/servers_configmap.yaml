@@ -4,5 +4,5 @@ metadata:
     name: servers-configmap
 data:
     MYSQL_DATABASE_HOST: db-svc
-    MYSQL_USER: cemal
+    MYSQL_USER: yasin
     MYSQL_DATABASE: phonebook
