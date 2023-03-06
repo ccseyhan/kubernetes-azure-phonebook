@@ -13,6 +13,7 @@ pipeline {
         stage('Create Infrastructure for the App') {
             steps {
                 echo 'Creating Infrastructure for the App on AWS Cloud'
+                sh 'cd eks-terraform'
                 sh 'terraform init'
                 sh 'terraform apply --auto-approve'
             }
@@ -28,3 +29,4 @@ pipeline {
             }
         }
     }
+}
