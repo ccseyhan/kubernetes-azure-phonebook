@@ -16,10 +16,10 @@ pipeline {
                 // sh 'ls'
                 // dir('/var/lib/jenkins/workspace/Jenkins-project/eks-terraform'){
                 //     echo 'Creating Infrastructure for the App on AWS Cloud'
-                    cd 'eks-terraform'
-                    sh 'ls'
-                    sh 'terraform init'
-                    sh 'terraform apply --auto-approve'
+                cd 'eks-terraform'
+                sh 'ls'
+                sh 'terraform init'
+                sh 'terraform apply --auto-approve'
                 }
             }
         }
