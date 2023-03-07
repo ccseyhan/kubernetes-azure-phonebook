@@ -12,25 +12,41 @@ pipeline {
     stages {
         stage('Create Infrastructure for the App') {
             steps {
-                dir('/var/lib/jenkins/workspace/terraform-pipeline/eks-terraform'){
+                dir('/var/lib/jenkins/workspace/Jenkins-project/eks-terraform'){
+                    echo 'Creating Infrastructure for the App on AWS Cloud'
                     sh 'terraform init'
                     sh 'terraform apply --auto-approve'
                 }
-                // echo 'Creating Infrastructure for the App on AWS Cloud'
-                // sh 'cd eks-terraform'
-                // sh 'ls'
-                // sh 'terraform init'
-                // sh 'terraform apply --auto-approve'
             }
         }
-        stage('Destroy the Infrastructure'){
+        stage('Connect to EKS') {
+            steps {
+                dir('/var/lib/jenkins/workspace/Jenkins-project/eks-terraform'){
+                    echo 'Injecting Terraform Output into connection command'
+                    script {
+                        env.EKS_NAME = sh(script: 'terraform output -raw eks_name', returnStdout:true).trim()
+                    }
+                    sh 'aws eks update-kubeconfig --name=${EKS_NAME}'
+                }
+            }
+        }
+        stage('Deploy K8s files') {
+            steps {
+                dir('/var/lib/jenkins/workspace/Jenkins-project/k8s') {
+                    sh 'kubectl apply -f .'
+                }
+            }
+        }
+        stage('Destroy the Infrastructure') {
             steps{
                 timeout(time:5, unit:'DAYS'){
                     input message:'Do you want to terminate?'
                 }
-                sh """
-                terraform destroy --auto-approve
-                """
+                dir('/var/lib/jenkins/workspace/Jenkins-project/eks-terraform'){
+                    sh """
+                    terraform destroy --auto-approve
+                    """
+                }
             }
         }
     }
