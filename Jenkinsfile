@@ -14,6 +14,7 @@ pipeline {
             steps {
                 dir('/var/lib/jenkins/workspace/Jenkins-project/eks-terraform'){
                     echo 'Creating Infrastructure for the App on AWS Cloud'
+                    sh 'ls'
                     sh 'pwd'
                     sh 'terraform init'
                     sh 'terraform apply --auto-approve'
