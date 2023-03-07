@@ -17,7 +17,7 @@ pipeline {
                     sh 'ls'
                     sh 'pwd'
                     sh 'terraform init'
-                    sh 'terraform destroy --auto-approve'
+                    sh 'terraform apply --auto-approve'
                 }
             }
         }
