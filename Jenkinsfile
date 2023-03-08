@@ -8,9 +8,11 @@ pipeline {
         stage('Create Infrastructure for the App') {
             steps {
                 sh 'az login --identity'
-                echo 'Creating Infrastructure for the App on Azure Cloud'
-                sh 'terraform init'
-                sh 'terraform apply --auto-approve'
+                dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
+                    echo 'Creating Infrastructure for the App on AZURE Cloud'
+                    sh 'terraform init'
+                    sh 'terraform apply --auto-approve'
+                }
             }
         }
 

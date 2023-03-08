@@ -50,26 +50,26 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
 #  This resource requires a wait time that doesnt really fit with using pipeline
 
-# data "azurerm_resources" "example" {
-#   resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+data "azurerm_resources" "example" {
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
 
-#   type = "Microsoft.Network/networkSecurityGroups"
-#   }
+  type = "Microsoft.Network/networkSecurityGroups"
+  }
 
-# resource "azurerm_network_security_rule" "example" {
-#   name                        = "example"
-#   priority                    = 100
-#   direction                   = "Inbound"
-#   access                      = "Allow"
-#   protocol                    = "Tcp"
-#   source_port_range           = "*"
-#   destination_port_range      = "30000-32767"
-#   source_address_prefix       = "*"
-#   destination_address_prefix  = "*"
-#   resource_group_name         = azurerm_kubernetes_cluster.aks.node_resource_group
-#   network_security_group_name = data.azurerm_resources.example.resources.0.name
+resource "azurerm_network_security_rule" "example" {
+  name                        = "example"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "30000-32767"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_kubernetes_cluster.aks.node_resource_group
+  network_security_group_name = data.azurerm_resources.example.resources.0.name
 
-# }
+}
 
 data "azurerm_lb" "lb" {
   name                = "Kubernetes"
