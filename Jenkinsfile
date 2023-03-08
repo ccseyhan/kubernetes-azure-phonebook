@@ -16,8 +16,7 @@ pipeline {
             steps {
                 dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
                     echo 'Creating Infrastructure for the App on AZURE Cloud'
-                    sh 'ls'
-                    sh 'pwd'
+                    sh 'echo ${ARM_TENANT_ID}'
                     sh 'terraform init'
                     sh 'terraform apply --auto-approve'
                 }
