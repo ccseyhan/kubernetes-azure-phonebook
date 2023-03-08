@@ -8,7 +8,12 @@ pipeline {
         stage('Az login') {
             steps {
                 withCredentials([azureServicePrincipal('AZURE_SERVICE_PRINCIPAL')]) {
-                sh 'az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}'
+                sh '''
+                export ARM_CLIENT_ID="${AZURE_CLIENT_ID}"
+                export ARM_CLIENT_SECRET="${AZURE_CLIENT_SECRET}"
+                export ARM_TENANT_ID="${AZURE_TENANT_ID}"
+                export ARM_SUBSCRIPTION_ID="134eac38-c5cf-45f6-aa75-5807ff920f63"
+                '''
                 dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
                     echo 'Creating Infrastructure for the App on AZURE Cloud'
                     sh 'terraform init'
