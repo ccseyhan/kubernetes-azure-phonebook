@@ -5,6 +5,10 @@
 # https://aka.ms/yaml
 
 pr: 
+  branches:
+    include:
+    - main
+    - releases/*
   paths:
     include:
     - aks-terraform
