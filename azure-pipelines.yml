@@ -4,8 +4,10 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- main
+pr: 
+  paths:
+    include:
+    - aks-terraform
 
 pool:
   vmImage: ubuntu-latest
