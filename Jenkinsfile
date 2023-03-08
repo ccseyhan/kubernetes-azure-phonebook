@@ -9,6 +9,11 @@ pipeline {
             steps {
                 withCredentials([azureServicePrincipal('AZURE_SERVICE_PRINCIPAL')]) {
                 sh 'az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}'
+                dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
+                    echo 'Creating Infrastructure for the App on AZURE Cloud'
+                    sh 'terraform init'
+                    sh 'terraform apply --auto-approve'
+                }
                 }
             }
         }
