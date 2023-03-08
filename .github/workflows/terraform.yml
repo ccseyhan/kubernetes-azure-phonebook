@@ -48,7 +48,13 @@ jobs:
       run: |
         cd aks-terraform
         terraform apply -auto-approve
-        
+          
+    - name: AKS configuration
+      uses: Azure/aks-set-context@v1
+      with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: phonebook-aks
+          resource-group: phonebook-rg
     
     - name: Deploy to AKS
       uses: Azure/k8s-deploy@v4
