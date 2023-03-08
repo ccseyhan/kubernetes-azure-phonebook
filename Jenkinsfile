@@ -4,6 +4,13 @@ pipeline {
         terraform 'terraform'
     }
 
+    environment {
+        ARM_SUBSCRIPTION_ID = ${{secrets.ARM_SUBSCRIPTION_ID}}
+        ARM_TENANT_ID = ${{secrets.ARM_TENANT_ID}}
+        ARM_CLIENT_SECRET = ${{secrets.ARM_CLIENT_SECRET}}
+        ARM_CLIENT_ID = ${{secrets.ARM_CLIENT_ID}}
+    }
+
     stages {
         stage('Create Infrastructure for the App') {
             steps {
@@ -11,7 +18,6 @@ pipeline {
                     echo 'Creating Infrastructure for the App on AZURE Cloud'
                     sh 'ls'
                     sh 'pwd'
-                    sh 'az login --identity'
                     sh 'terraform init'
                     sh 'terraform apply --auto-approve'
                 }
