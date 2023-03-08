@@ -48,3 +48,9 @@ jobs:
       run: |
         cd aks-terraform
         terraform apply -auto-approve
+        
+    
+    - name: Deploy to AKS
+      uses: Azure/k8s-deploy@v4
+      with:
+         manifests: k8s/
