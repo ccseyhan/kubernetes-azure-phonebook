@@ -9,13 +9,19 @@ terraform {
     resource_group_name = "sshkey"
     storage_account_name = "ccseyhan"
     container_name = "terraform-backend"
-    key = "terraform.tfstate" 
+    key = "terraform.tfstate"
+    use_msi              = true
+    subscription_id ="134eac38-c5cf-45f6-aa75-5807ff920f63"
+    tenant_id = "1a93b615-8d62-418a-ac28-22501cf1f978"
   }
 }
 
 provider "azurerm" {
   features {
   }
+  use_msi              = true
+  subscription_id ="134eac38-c5cf-45f6-aa75-5807ff920f63"
+  tenant_id = "1a93b615-8d62-418a-ac28-22501cf1f978"
 }
 
 
@@ -56,8 +62,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
 #   direction                   = "Inbound"
 #   access                      = "Allow"
 #   protocol                    = "Tcp"
-#   source_port_range           = "30000-32767"
-#   destination_port_range      = "*"
+#   source_port_range           = "*"
+#   destination_port_range      = "30000-32767"
 #   source_address_prefix       = "*"
 #   destination_address_prefix  = "*"
 #   resource_group_name         = azurerm_kubernetes_cluster.aks.node_resource_group
