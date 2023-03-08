@@ -5,15 +5,13 @@ pipeline {
     }
 
     environment {
-        AWS_REGION = "us-east-1"
-        AWS_ACCOUNT_ID = sh(script:'export PATH="$PATH:/usr/local/bin" && aws sts get-caller-identity --query Account --output text', returnStdout:true).trim()
     }
 
     stages {
         stage('Create Infrastructure for the App') {
             steps {
-                dir('/var/lib/jenkins/workspace/Jenkins_project/eks-terraform'){
-                    echo 'Creating Infrastructure for the App on AWS Cloud'
+                dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
+                    echo 'Creating Infrastructure for the App on AZURE Cloud'
                     sh 'ls'
                     sh 'pwd'
                     sh 'terraform init'
@@ -21,14 +19,16 @@ pipeline {
                 }
             }
         }
-        stage('Connect to EKS') {
+        stage('Connect to AKS') {
             steps {
-                dir('/var/lib/jenkins/workspace/Jenkins_project/eks-terraform'){
+                dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
                     echo 'Injecting Terraform Output into connection command'
                     script {
-                        env.EKS_NAME = sh(script: 'terraform output -raw eks_name', returnStdout:true).trim()
+                        env.AKS_NAME = sh(script: 'terraform output -raw aks_name', returnStdout:true).trim()
+                        env.RG_NAME = sh(script: 'terraform output -raw rg_name', returnStdout:true).trim()
                     }
-                    sh 'aws eks update-kubeconfig --name=${EKS_NAME}'
+                    sh 'aws eks update-kubeconfig --name=${AKS_NAME}'
+                    sh 'az aks get-credentials --resource-group ${RG_NAME} --name ${AKS_NAME}'
                 }
             }
         }
@@ -44,7 +44,7 @@ pipeline {
                 timeout(time:5, unit:'DAYS'){
                     input message:'Do you want to terminate?'
                 }
-                dir('/var/lib/jenkins/workspace/Jenkins_project/eks-terraform'){
+                dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
                     sh """
                     terraform destroy --auto-approve
                     """
