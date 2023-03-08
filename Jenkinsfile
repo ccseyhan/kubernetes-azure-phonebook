@@ -14,6 +14,7 @@ pipeline {
                     echo 'Creating Infrastructure for the App on AZURE Cloud'
                     sh 'ls'
                     sh 'pwd'
+                    sh 'az login --identity'
                     sh 'terraform init'
                     sh 'terraform apply --auto-approve'
                 }
