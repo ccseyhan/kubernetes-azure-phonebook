@@ -12,13 +12,13 @@ pipeline {
     }
 
     stages {
-        stage('Az login')
+        stage('Az login') {
             steps {
                 withCredentials([azureServicePrincipal('AZURE_SERVICE_PRINCIPAL')]) {
                 sh 'az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}'
                 }
-}
-       
+            }
+        }
         stage('Create Infrastructure for the App') {
             steps {
                 dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
