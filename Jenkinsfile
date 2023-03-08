@@ -4,9 +4,6 @@ pipeline {
         terraform 'terraform'
     }
 
-    environment {
-    }
-
     stages {
         stage('Create Infrastructure for the App') {
             steps {
