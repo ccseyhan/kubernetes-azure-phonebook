@@ -4,13 +4,6 @@ pipeline {
         terraform 'terraform'
     }
 
-    environment {
-        ARM_SUBSCRIPTION_ID = "${secrets.ARM_SUBSCRIPTION_ID}"
-        ARM_TENANT_ID = "${secrets.ARM_TENANT_ID}"
-        ARM_CLIENT_SECRET = "${secrets.ARM_CLIENT_SECRET}"
-        ARM_CLIENT_ID = "${secrets.ARM_CLIENT_ID}"
-    }
-
     stages {
         stage('Az login') {
             steps {
