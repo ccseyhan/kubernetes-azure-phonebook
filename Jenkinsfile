@@ -19,6 +19,11 @@ pipeline {
         stage('Connect to AKS') {
             steps {
                 dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
+                    echo 'Injecting Terraform Output into connection command'
+                    script {
+                        env.AKS_NAME = sh(script: 'terraform output -raw aks_name', returnStdout:true).trim()
+                        env.RG_NAME = sh(script: 'terraform output -raw rg_name', returnStdout:true).trim()
+                    }
                     sh 'az aks get-credentials --resource-group ${RG_NAME} --name ${AKS_NAME}'
                 }
             }
