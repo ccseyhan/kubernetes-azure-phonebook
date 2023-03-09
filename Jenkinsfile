@@ -10,7 +10,7 @@ pipeline {
                 sh 'az login --identity'
                 dir('/var/lib/jenkins/workspace/Jenkins_project/aks-terraform'){
                     echo 'Creating Infrastructure for the App on AZURE Cloud'
-                    sh 'terraform init -migrate-state'
+                    sh 'terraform init'
                     sh 'terraform apply --auto-approve'
                 }
             }
