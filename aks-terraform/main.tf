@@ -6,9 +6,9 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name = "sshkey"
-    storage_account_name = "ccseyhan"
-    container_name = "terraform-backend"
+    resource_group_name = "tf-state-rg"
+    storage_account_name = "tfstatecontainerfxfx3223"
+    container_name = "tfstatecontainer"
     key = "terraform.tfstate" 
   }
 }
@@ -42,28 +42,28 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 }
 
-#  This resource requires a wait time that doesnt really fit with using pipeline
+#  This resource requires a wait time that doesnt really fit with using pipeline ------------------------
 
-# data "azurerm_resources" "example" {
-#   resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
+data "azurerm_resources" "example" {
+  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
 
-#   type = "Microsoft.Network/networkSecurityGroups"
-#   }
+  type = "Microsoft.Network/networkSecurityGroups"
+  }
 
-# resource "azurerm_network_security_rule" "example" {
-#   name                        = "example"
-#   priority                    = 100
-#   direction                   = "Inbound"
-#   access                      = "Allow"
-#   protocol                    = "Tcp"
-#   source_port_range           = "30000-32767"
-#   destination_port_range      = "*"
-#   source_address_prefix       = "*"
-#   destination_address_prefix  = "*"
-#   resource_group_name         = azurerm_kubernetes_cluster.aks.node_resource_group
-#   network_security_group_name = data.azurerm_resources.example.resources.0.name
+resource "azurerm_network_security_rule" "example" {
+  name                        = "example"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "30000-32767"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_kubernetes_cluster.aks.node_resource_group
+  network_security_group_name = data.azurerm_resources.example.resources.0.name
 
-# }
+}
 
 data "azurerm_lb" "lb" {
   name                = "Kubernetes"
@@ -95,7 +95,7 @@ resource "azurerm_lb_rule" "rule30001" {
   backend_port                   = 30001
   frontend_ip_configuration_name = "${data.azurerm_lb.lb.frontend_ip_configuration.0.name}"
   backend_address_pool_ids = [data.azurerm_lb_backend_address_pool.backend_pool.id]
-  disable_outbound_snat = true
+  disable_outbound_snat = true #SNAT allows traffic from a private network to go out to the internet. 
 }
 
 resource "azurerm_lb_rule" "rule30002" {
@@ -112,7 +112,4 @@ resource "azurerm_lb_rule" "rule30002" {
 data "azurerm_public_ips" "example" {
   resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
   attachment_status   = "Attached"
-}
-output "public_ip" {
-  value = data.azurerm_public_ips.example.public_ips[0]
 }
